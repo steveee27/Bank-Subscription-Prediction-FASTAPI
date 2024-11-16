@@ -1,6 +1,8 @@
-# Bank Marketing Campaign Prediction
+# Bank Subscription Prediction using Machine Learning and FASTAPI
 
 This project predicts whether a customer is likely to subscribe to a long-term deposit based on their demographic and campaign-related data. It includes a machine learning pipeline for data preprocessing, model training, evaluation, and a RESTful API built with FastAPI for deployment.
+
+---
 
 ## Table of Contents
 
@@ -13,12 +15,20 @@ This project predicts whether a customer is likely to subscribe to a long-term d
 - [Model Evaluation Results](#model-evaluation-results)
 - [License](#license)
 
+---
+
 ## Overview
 
 The **Bank Marketing Campaign Prediction** project is designed to help a bank focus its marketing efforts on customers who are most likely to subscribe to long-term deposits. It involves:
 - Preprocessing campaign data with feature encoding and scaling.
 - Training and evaluating machine learning models (Logistic Regression and Random Forest).
 - Deploying the best-performing model through a FastAPI-based API.
+
+### Dataset
+
+The project uses the **Bank Marketing Dataset**, which includes customer demographic data, campaign-related information, and a target variable `y` that indicates whether the customer subscribed to a long-term deposit (`yes`/`no`). The dataset consists of 16 features and is located in the `data/bank-marketing.csv` file.
+
+---
 
 ## Technologies Used
 
@@ -27,6 +37,8 @@ The **Bank Marketing Campaign Prediction** project is designed to help a bank fo
 - **Scikit-learn** for preprocessing and machine learning.
 - **Pandas** for data manipulation.
 - **Uvicorn** for ASGI server.
+
+---
 
 ## Project Structure
 
@@ -44,6 +56,8 @@ The **Bank Marketing Campaign Prediction** project is designed to help a bank fo
 ├── README.md                         # Project documentation
 ```
 
+---
+
 ## Setup Instructions
 
 ### Prerequisites
@@ -51,8 +65,6 @@ The **Bank Marketing Campaign Prediction** project is designed to help a bank fo
 - Python 3.10 or higher
 - Pipenv or virtualenv for environment management
 - `git` installed on your system
-
----
 
 ### Installation
 
@@ -113,47 +125,6 @@ The **Bank Marketing Campaign Prediction** project is designed to help a bank fo
     - Swagger UI: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
     - ReDoc: [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
 
-3. **Test the API:**
-
-    Use the `POST /predict` endpoint to make predictions. You can use a JSON body like the following example:
-    ```json
-    {
-      "age": 30,
-      "job": "technician",
-      "marital": "single",
-      "education": "university.degree",
-      "default": "no",
-      "housing": "yes",
-      "loan": "no",
-      "contact": "cellular",
-      "month": "may",
-      "day_of_week": "mon",
-      "duration": 300,
-      "campaign": 1,
-      "pdays": 999,
-      "previous": 0,
-      "poutcome": "nonexistent"
-    }
-    ```
-
-    Example cURL command:
-    ```bash
-    curl -X POST "http://127.0.0.1:8000/predict" \
-    -H "Content-Type: application/json" \
-    -d '{"age":30,"job":"technician","marital":"single","education":"university.degree","default":"no","housing":"yes","loan":"no","contact":"cellular","month":"may","day_of_week":"mon","duration":300,"campaign":1,"pdays":999,"previous":0,"poutcome":"nonexistent"}'
-    ```
-
----
-
-### Deployment (Optional)
-
-To deploy the FastAPI application to a production environment, you can use a production server like **Gunicorn** or deploy it to cloud platforms such as AWS, Azure, or Heroku. 
-
-For example, to run using Gunicorn:
-```bash
-gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000
-```
-
 ---
 
 ## API Endpoints
@@ -197,17 +168,17 @@ gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000
 - **Sample Request**:
     ```json
     {
-      "age": 30,
-      "job": "technician",
+      "age": 42,
+      "job": "admin.",
       "marital": "single",
       "education": "university.degree",
       "default": "no",
       "housing": "yes",
-      "loan": "no",
-      "contact": "cellular",
+      "loan": "yes",
+      "contact": "telephone",
       "month": "may",
-      "day_of_week": "mon",
-      "duration": 300,
+      "day_of_week": "wed",
+      "duration": 938.0,
       "campaign": 1,
       "pdays": 999,
       "previous": 0,
@@ -227,10 +198,8 @@ gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000
     ```bash
     curl -X POST "http://127.0.0.1:8000/predict" \
     -H "Content-Type: application/json" \
-    -d '{"age":30,"job":"technician","marital":"single","education":"university.degree","default":"no","housing":"yes","loan":"no","contact":"cellular","month":"may","day_of_week":"mon","duration":300,"campaign":1,"pdays":999,"previous":0,"poutcome":"nonexistent"}'
+    -d '{"age":42,"job":"admin.","marital":"single","education":"university.degree","default":"no","housing":"yes","loan":"yes","contact":"telephone","month":"may","day_of_week":"wed","duration":938,"campaign":1,"pdays":999,"previous":0,"poutcome":"nonexistent"}'
     ```
-
----
 
 ### Notes
 - **Data Validation**: The API validates the input data. If any required field is missing or contains invalid data, the API will return an error response.
@@ -240,32 +209,40 @@ gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000
 
 ## Model Evaluation Results
 
-This project compares the performance of **Random Forest** and **Logistic Regression** models, tuned using GridSearchCV. Below are the hyperparameters and evaluation metrics for each model:
+This project compares the performance of **Random Forest** and **Logistic Regression** models, tuned using GridSearchCV. Below are the hyperparameters and evaluation metrics for both **Class 0** and **Class 1**:
 
 ### Evaluation Metrics
 
-| **Model**              | **Hyperparameters**                                                                                      | **Precision (Class 1)** | **Recall (Class 1)** | **F1-Score (Class 1)** | **Accuracy** |
-|-------------------------|---------------------------------------------------------------------------------------------------------|-------------------------|----------------------|-------------------------|--------------|
-| **Random Forest**       | `{'criterion': 'gini', 'max_depth': None, 'min_samples_split': 5, 'n_estimators': 50}`                 | 0.51                    | 0.29                 | 0.37                    | 91%          |
-| **Logistic Regression** | `{'penalty': 'l2', 'C': 1, 'max_iter': 100}`                                                           | 0.60                    | 0.37                 | 0.46                    | 92%          |
+| **Model**              | **Hyperparameters**                                                                                      | **Precision (Class 0)** | **Recall (Class 0)** | **F1-Score (Class 0)** | **Precision (Class 1)** | **Recall (Class 1)** | **F1-Score (Class 1)** | **Accuracy** |
+|-------------------------|---------------------------------------------------------------------------------------------------------|-------------------------|----------------------|-------------------------|-------------------------|----------------------|-------------------------|--------------|
+| **Random Forest**       | `{'criterion': 'gini', 'max_depth': None, 'min_samples_split': 5, 'n_estimators': 50}`                 | 0.93                    | 0.97                 | 0.95                    | 0.51                    | 0.29                 | 0.37                    | 91%          |
+| **Logistic Regression** | `{'penalty': 'l2', 'C': 1, 'max_iter': 100}`                                                           | 0.94                    | 0.97                 | 0.96                    | 0.60                    | 0.37                 | 0.46                    | 92%          |
 
 ---
 
 ### Insights
 
-1. **Logistic Regression**:
-   - Achieved higher recall (**0.37**) and F1-Score (**0.46**) for the minority class (Class 1).
-   - Provided the highest accuracy (**92%**) compared to Random Forest.
+1. **Class Imbalance**:
+   - The dataset is highly imbalanced, with 1489 examples in **Class 0** (no subscription) and only 154 examples in **Class 1** (subscription).
 
 2. **Random Forest**:
-   - Performed slightly worse in both recall (**0.29**) and F1-Score (**0.37**) for the minority class.
-   - Achieved a comparable accuracy (**91%**), but with lower overall balance for minority class predictions.
+   - **Class 0**: High performance with precision (0.93), recall (0.97), and F1-Score (0.95).
+   - **Class 1**: Struggles with recall (0.29) and F1-Score (0.37), indicating a high number of false negatives.
+
+3. **Logistic Regression**:
+   - **Class 0**: Slightly better metrics than Random Forest, with precision (0.94), recall (0.97), and F1-Score (0.96).
+   - **Class 1**: Outperforms Random Forest with recall (0.37) and F1-Score (0.46), making it better suited for identifying potential subscribers.
+
+4. **Overall Accuracy**:
+   - Random Forest: 91%
+   - Logistic Regression: 92%
+   - While both models achieve high accuracy, this is largely due to the imbalance in the dataset, so accuracy alone is not sufficient to evaluate performance.
 
 ---
 
 ### Conclusion
 
-Based on these results, **Logistic Regression** was selected as the final model due to its superior performance in predicting the minority class (Class 1) and overall accuracy. The model is deployed using FastAPI for real-time predictions.
+**Logistic Regression** is selected as the final model due to its superior performance in predicting the minority class (**Class 1**) while maintaining high performance for the majority class (**Class 0**). This makes it more effective for identifying potential customers likely to subscribe, supporting better marketing decisions.
 
 ---
 
