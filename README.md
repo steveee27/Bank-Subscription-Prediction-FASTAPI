@@ -242,8 +242,6 @@ This project compares the performance of **Random Forest** and **Logistic Regres
 
 The dataset exhibits significant class imbalance, with most examples belonging to Class 0 (no subscription). While both Random Forest and Logistic Regression perform well for Class 0, Logistic Regression outperforms Random Forest for Class 1, achieving higher recall (0.37 vs. 0.29) and F1-Score (0.46 vs. 0.37), making it better suited for identifying potential subscribers. Both models achieve high overall accuracy (Random Forest: 91%, Logistic Regression: 92%), but this is heavily influenced by the class imbalance, emphasizing the importance of evaluating minority class performance beyond accuracy alone.
 
----
-
 ### Conclusion
 
 **Logistic Regression** is selected as the final model due to its superior performance in predicting the minority class (**Class 1**) while maintaining high performance for the majority class (**Class 0**). This makes it more effective for identifying potential customers likely to subscribe, supporting better marketing decisions.
