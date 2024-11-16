@@ -240,25 +240,7 @@ This project compares the performance of **Random Forest** and **Logistic Regres
 | **Random Forest**       | `{'criterion': 'gini', 'max_depth': None, 'min_samples_split': 5, 'n_estimators': 50}`                 | 0.93                    | 0.97                 | 0.95                    | 0.51                    | 0.29                 | 0.37                    | 91%          |
 | **Logistic Regression** | `{'penalty': 'l2', 'C': 1, 'max_iter': 100}`                                                           | 0.94                    | 0.97                 | 0.96                    | 0.60                    | 0.37                 | 0.46                    | 92%          |
 
----
-
-### Insights
-
-1. **Class Imbalance**:
-   - The dataset is highly imbalanced, with 1489 examples in **Class 0** (no subscription) and only 154 examples in **Class 1** (subscription).
-
-2. **Random Forest**:
-   - **Class 0**: High performance with precision (0.93), recall (0.97), and F1-Score (0.95).
-   - **Class 1**: Struggles with recall (0.29) and F1-Score (0.37), indicating a high number of false negatives.
-
-3. **Logistic Regression**:
-   - **Class 0**: Slightly better metrics than Random Forest, with precision (0.94), recall (0.97), and F1-Score (0.96).
-   - **Class 1**: Outperforms Random Forest with recall (0.37) and F1-Score (0.46), making it better suited for identifying potential subscribers.
-
-4. **Overall Accuracy**:
-   - Random Forest: 91%
-   - Logistic Regression: 92%
-   - While both models achieve high accuracy, this is largely due to the imbalance in the dataset, so accuracy alone is not sufficient to evaluate performance.
+The dataset exhibits significant class imbalance, with most examples belonging to Class 0 (no subscription). While both Random Forest and Logistic Regression perform well for Class 0, Logistic Regression outperforms Random Forest for Class 1, achieving higher recall (0.37 vs. 0.29) and F1-Score (0.46 vs. 0.37), making it better suited for identifying potential subscribers. Both models achieve high overall accuracy (Random Forest: 91%, Logistic Regression: 92%), but this is heavily influenced by the class imbalance, emphasizing the importance of evaluating minority class performance beyond accuracy alone.
 
 ---
 
