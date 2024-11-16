@@ -1,2 +1,277 @@
-# Bank-Subscription-Prediction-FASTAPI
-A machine learning API built using FastAPI to predict customer subscription to long-term deposits based on marketing campaign data. This project preprocesses input data, trains models, and serves predictions through a RESTful API.
+# Bank Marketing Campaign Prediction
+
+This project predicts whether a customer is likely to subscribe to a long-term deposit based on their demographic and campaign-related data. It includes a machine learning pipeline for data preprocessing, model training, evaluation, and a RESTful API built with FastAPI for deployment.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Technologies Used](#technologies-used)
+- [Project Structure](#project-structure)
+- [Setup Instructions](#setup-instructions)
+- [API Endpoints](#api-endpoints)
+- [Features](#features)
+- [Model Evaluation Results](#model-evaluation-results)
+- [License](#license)
+
+## Overview
+
+The **Bank Marketing Campaign Prediction** project is designed to help a bank focus its marketing efforts on customers who are most likely to subscribe to long-term deposits. It involves:
+- Preprocessing campaign data with feature encoding and scaling.
+- Training and evaluating machine learning models (Logistic Regression and Random Forest).
+- Deploying the best-performing model through a FastAPI-based API.
+
+## Technologies Used
+
+- **Python 3.10**
+- **FastAPI** for building the RESTful API.
+- **Scikit-learn** for preprocessing and machine learning.
+- **Pandas** for data manipulation.
+- **Uvicorn** for ASGI server.
+
+## Project Structure
+
+```plaintext
+├── data/
+│   └── bank-marketing.csv          # Dataset
+├── models/
+│   ├── logistic_classifier_best.pkl  # Trained Logistic Regression model
+│   ├── robust_scaler.pkl             # Scaler used during preprocessing
+├── src/
+│   ├── Training-Model.ipynb          # Notebook for training models
+│   ├── Training-Model.pdf            # PDF version of training process
+├── main.py                           # FastAPI application
+├── requirements.txt                  # Python dependencies
+├── README.md                         # Project documentation
+```
+
+## Setup Instructions
+
+### Prerequisites
+
+- Python 3.10 or higher
+- Pipenv or virtualenv for environment management
+- `git` installed on your system
+
+---
+
+### Installation
+
+1. **Clone the repository:**
+
+    Clone the repository from GitHub to your local machine:
+    ```bash
+    git clone https://github.com/steveee27/Bank-Subscription-Prediction-FASTAPI.git
+    cd Bank-Subscription-Prediction-FASTAPI
+    ```
+
+2. **Create and activate a virtual environment:**
+
+    Create a virtual environment to isolate project dependencies:
+    ```bash
+    python -m venv env
+    ```
+
+    Activate the virtual environment:
+    - On Linux/MacOS:
+        ```bash
+        source env/bin/activate
+        ```
+    - On Windows:
+        ```bash
+        env\Scripts\activate
+        ```
+
+3. **Install project dependencies:**
+
+    Install all required dependencies specified in the `requirements.txt` file:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4. **Prepare the model and scaler files:**
+
+    Ensure the following files are present in the `models/` directory:
+    - `logistic_classifier_best.pkl` (the trained model)
+    - `robust_scaler.pkl` (the scaler used for preprocessing)
+
+    If the files are missing, refer to the `src/Training-Model.ipynb` notebook to retrain the model and generate these files.
+
+---
+
+### Running the API
+
+1. **Start the FastAPI server:**
+
+    Run the FastAPI server locally:
+    ```bash
+    uvicorn main:app --reload
+    ```
+
+2. **Access the API documentation:**
+
+    Open your browser and navigate to:
+    - Swagger UI: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+    - ReDoc: [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
+
+3. **Test the API:**
+
+    Use the `POST /predict` endpoint to make predictions. You can use a JSON body like the following example:
+    ```json
+    {
+      "age": 30,
+      "job": "technician",
+      "marital": "single",
+      "education": "university.degree",
+      "default": "no",
+      "housing": "yes",
+      "loan": "no",
+      "contact": "cellular",
+      "month": "may",
+      "day_of_week": "mon",
+      "duration": 300,
+      "campaign": 1,
+      "pdays": 999,
+      "previous": 0,
+      "poutcome": "nonexistent"
+    }
+    ```
+
+    Example cURL command:
+    ```bash
+    curl -X POST "http://127.0.0.1:8000/predict" \
+    -H "Content-Type: application/json" \
+    -d '{"age":30,"job":"technician","marital":"single","education":"university.degree","default":"no","housing":"yes","loan":"no","contact":"cellular","month":"may","day_of_week":"mon","duration":300,"campaign":1,"pdays":999,"previous":0,"poutcome":"nonexistent"}'
+    ```
+
+---
+
+### Deployment (Optional)
+
+To deploy the FastAPI application to a production environment, you can use a production server like **Gunicorn** or deploy it to cloud platforms such as AWS, Azure, or Heroku. 
+
+For example, to run using Gunicorn:
+```bash
+gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000
+```
+
+---
+
+## API Endpoints
+
+### **1. GET /**
+- **Description**: A welcome endpoint to check if the API is running.
+- **Method**: `GET`
+- **Request**: No parameters required.
+- **Response**:
+    ```json
+    {
+      "message": "Welcome to the Bank Subscription Prediction API!"
+    }
+    ```
+
+---
+
+### **2. POST /predict**
+- **Description**: Predicts whether a customer is likely to subscribe to a long-term deposit based on input data.
+- **Method**: `POST`
+- **Request Body**: Accepts a JSON object with the following fields:
+
+    | **Field**         | **Type**   | **Description**                               | **Example**          |
+    |-------------------|------------|-----------------------------------------------|----------------------|
+    | `age`             | `integer`  | Age of the customer.                          | 30                   |
+    | `job`             | `string`   | Type of job the customer has.                 | "technician"         |
+    | `marital`         | `string`   | Marital status of the customer.               | "single"             |
+    | `education`       | `string`   | Education level of the customer.              | "university.degree"  |
+    | `default`         | `string`   | Whether the customer has credit in default.   | "no"                 |
+    | `housing`         | `string`   | Whether the customer has a housing loan.      | "yes"                |
+    | `loan`            | `string`   | Whether the customer has a personal loan.     | "no"                 |
+    | `contact`         | `string`   | Contact communication type.                   | "cellular"           |
+    | `month`           | `string`   | Last contact month of the year.               | "may"                |
+    | `day_of_week`     | `string`   | Last contact day of the week.                 | "mon"                |
+    | `duration`        | `integer`  | Last contact duration in seconds.             | 300                  |
+    | `campaign`        | `integer`  | Number of contacts during this campaign.      | 1                    |
+    | `pdays`           | `integer`  | Number of days since the client was last contacted. | 999             |
+    | `previous`        | `integer`  | Number of contacts performed before this campaign. | 0                 |
+    | `poutcome`        | `string`   | Outcome of the previous marketing campaign.   | "nonexistent"        |
+
+- **Sample Request**:
+    ```json
+    {
+      "age": 30,
+      "job": "technician",
+      "marital": "single",
+      "education": "university.degree",
+      "default": "no",
+      "housing": "yes",
+      "loan": "no",
+      "contact": "cellular",
+      "month": "may",
+      "day_of_week": "mon",
+      "duration": 300,
+      "campaign": 1,
+      "pdays": 999,
+      "previous": 0,
+      "poutcome": "nonexistent"
+    }
+    ```
+
+- **Response**:
+    - A JSON object indicating the prediction result (`yes` or `no`).
+    ```json
+    {
+      "prediction": "yes"
+    }
+    ```
+
+- **Sample cURL Command**:
+    ```bash
+    curl -X POST "http://127.0.0.1:8000/predict" \
+    -H "Content-Type: application/json" \
+    -d '{"age":30,"job":"technician","marital":"single","education":"university.degree","default":"no","housing":"yes","loan":"no","contact":"cellular","month":"may","day_of_week":"mon","duration":300,"campaign":1,"pdays":999,"previous":0,"poutcome":"nonexistent"}'
+    ```
+
+---
+
+### Notes
+- **Data Validation**: The API validates the input data. If any required field is missing or contains invalid data, the API will return an error response.
+- **Default Ports**: The API runs on port `8000` by default. Modify this if necessary by updating the `uvicorn` command.
+
+---
+
+## Model Evaluation Results
+
+This project compares the performance of **Random Forest** and **Logistic Regression** models, tuned using GridSearchCV. Below are the hyperparameters and evaluation metrics for each model:
+
+### Evaluation Metrics
+
+| **Model**              | **Hyperparameters**                                                                                      | **Precision (Class 1)** | **Recall (Class 1)** | **F1-Score (Class 1)** | **Accuracy** |
+|-------------------------|---------------------------------------------------------------------------------------------------------|-------------------------|----------------------|-------------------------|--------------|
+| **Random Forest**       | `{'criterion': 'gini', 'max_depth': None, 'min_samples_split': 5, 'n_estimators': 50}`                 | 0.51                    | 0.29                 | 0.37                    | 91%          |
+| **Logistic Regression** | `{'penalty': 'l2', 'C': 1, 'max_iter': 100}`                                                           | 0.60                    | 0.37                 | 0.46                    | 92%          |
+
+---
+
+### Insights
+
+1. **Logistic Regression**:
+   - Achieved higher recall (**0.37**) and F1-Score (**0.46**) for the minority class (Class 1).
+   - Provided the highest accuracy (**92%**) compared to Random Forest.
+
+2. **Random Forest**:
+   - Performed slightly worse in both recall (**0.29**) and F1-Score (**0.37**) for the minority class.
+   - Achieved a comparable accuracy (**91%**), but with lower overall balance for minority class predictions.
+
+---
+
+### Conclusion
+
+Based on these results, **Logistic Regression** was selected as the final model due to its superior performance in predicting the minority class (Class 1) and overall accuracy. The model is deployed using FastAPI for real-time predictions.
+
+---
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).
+
+You are free to use, modify, and distribute this project as long as proper attribution is given to the original author. See the `LICENSE` file for more details.
+
