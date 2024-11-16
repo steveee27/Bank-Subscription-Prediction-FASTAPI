@@ -206,6 +206,29 @@ The project uses the **Bank Marketing Dataset**, which includes customer demogra
 
 ---
 
+## Features
+
+The project is built to provide a complete end-to-end solution for predicting customer subscription likelihood. Below are the core features:
+
+- **Data Preprocessing**: 
+  - Handles missing values to ensure data integrity.
+  - Encodes categorical features (e.g., job, marital status) into numerical representations for machine learning compatibility.
+  - Scales numerical features (e.g., age, duration, campaign) to normalize the data for better model performance.
+
+- **Model Training**:
+  - Implements two machine learning algorithms: Logistic Regression and Random Forest.
+  - Tunes hyperparameters using GridSearchCV for optimal performance.
+  - Evaluates models using precision, recall, F1-score, and accuracy to select the best-performing model.
+
+- **RESTful API**:
+  - Deploys the selected model using FastAPI to serve predictions in real-time.
+  - Provides user-friendly API endpoints for integration with other systems.
+  - Features automated input validation to ensure robust and reliable API interactions.
+
+This combination of features ensures that the project is both technically robust and user-friendly, offering valuable insights and predictions to support marketing decisions.
+
+---
+
 ## Model Evaluation Results
 
 This project compares the performance of **Random Forest** and **Logistic Regression** models, tuned using GridSearchCV. Below are the hyperparameters and evaluation metrics for both **Class 0** and **Class 1**:
