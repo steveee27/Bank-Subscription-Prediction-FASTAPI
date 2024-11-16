@@ -44,16 +44,15 @@ The project uses the **Bank Marketing Dataset**, which includes customer demogra
 
 ```plaintext
 ├── data/
-│   └── bank-marketing.csv          # Dataset
+│   └── bank-marketing.csv                # Dataset
 ├── models/
-│   ├── logistic_classifier_best.pkl  # Trained Logistic Regression model
-│   ├── robust_scaler.pkl             # Scaler used during preprocessing
+│   ├── logistic_classifier_best.pkl      # Trained Logistic Regression model
+│   ├── robust_scaler.pkl                 # Scaler used during preprocessing
 ├── src/
-│   ├── Training-Model.ipynb          # Notebook for training models
-│   ├── Training-Model.pdf            # PDF version of training process
-├── main.py                           # FastAPI application
-├── requirements.txt                  # Python dependencies
-├── README.md                         # Project documentation
+│   ├── Training-Model.ipynb              # Notebook for training models
+├── main.py                               # FastAPI application
+├── requirements.txt                      # Python dependencies
+├── README.md                             # Project documentation
 ```
 
 ---
